@@ -1,6 +1,13 @@
-#include <iostream>
+/*
+ *   Fast Combination:  This is used to compute C(n, r) % p, where p is prime, 
+ *                      quickly using Euler's Theorem to calculate modular
+ *			inverses in the Zp group.
+ */
 
-// 1. FastCombination
+#include <iostream>
+#include <vector>
+
+using namespace std;
 
 // calculates (a^b) % p
 long long pow(long long a, long long b, long long p)
@@ -39,11 +46,29 @@ long long modularInversePrime(long long a, long long n)
 	return pow(a, n-2, n);
 }
 
-// calculates nCr (mod p)
-long long C(long long n, long long r, long long p)
+// calculates nCr (mod p), where p is prime 
+// since Zp is cyclic, 
+// 	n! / (r! (n-r)!) = n! (r!)^(-1) ((n-r)!)^(-1) (mod p)
+long long FC(long long n, long long r, long long p) 
 {
-	vector<long long> f(n+1, 1);
+ 	vector<long long> f(n+1, 1);
+
+	// calculates factorials
 	for(int i = 2; i <= n; i++)
 		f[i] = (f[i-1]*i) % p;
-	return (f[n]*((modularInversePrime(f[r], p) * modularInversePrime(f[n-r], p)) % p)) % p;
+	long long invfrp = modularInversePrime(f[r], p);
+	long long invfnrp = modularInversePrime(f[n-r], p);
+	return (f[n]*((invfrp * invfnrp) % p)) % p;
+}
+
+void makeTestCase(long long a1, long long a2, long long p)
+{
+	cout << "C(" << a1 << ", " << a2 << ") % " << p << " = " << FC(a1, a2, p) << endl;
+}
+
+int main()
+{
+	makeTestCase(25, 23, 1000000007);
+	makeTestCase(27, 21, 1000000007);
+	makeTestCase(5, 2, 13);
 }
