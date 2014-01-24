@@ -2,10 +2,7 @@
 #include <vector>
 #include <string>
 #include <list>
- 
 #include <set>
-#include <algorithm>
-#include <iterator>
 
 using namespace std; 
  
