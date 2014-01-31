@@ -1,5 +1,3 @@
-
-
 #include <iostream>
 #include <vector>
 
@@ -16,6 +14,42 @@ double fast_pow(double a, int n)
 	}
 
 	return ret;
+}
+
+#include <cmath>
+
+// | X(x1, x2) x Y(y1, y2) |
+double cross(double x1, double x2, double y1, double y2)
+{
+	return x1*y2 - x2*y1;
+}
+
+// area of triangle defined by points A, B, C
+double triangleArea(double a1, double a2, double b1, double b2, double c1, double c2)
+{
+	double r =  cross(b1-a1, b2-a2, c1-a1, c2-a2);
+	return 0.5*abs(r);
+} 
+
+// area of shape defined by points in vector<points>.  n >= 3
+struct point_t
+{
+	double x;
+	double y;
+};
+
+// doesn't have to be convex, but will return signed area.
+double convexArea(vector<point_t> points)
+{
+	double sum = 0;
+	double ox = points[0].x;
+	double oy = points[0].y;
+	for(int i = 1; i <= points.size()-2; i++)
+	{
+		sum += cross(points[i+1].x-ox, points[i+1].y - oy, points[i].x - ox, points[i].y - oy);
+	}
+
+	return 0.5*abs(sum);
 }
 
 
