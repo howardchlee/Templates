@@ -111,14 +111,76 @@ long long FC(long long n, long long r, long long p)
 	return (f[n]*((invfrp * invfnrp) % p)) % p;
 }
 
-void makeTestCase(long long a1, long long a2, long long p)
+// GCD
+
+long long gcd(long long a, long long b)
 {
-	cout << "C(" << a1 << ", " << a2 << ") % " << p << " = " << FC(a1, a2, p) << endl;
+	long long c;
+	while(a != 0)
+	{
+		c = a;
+		a = b%a;
+		b = c;
+	}	
+
+	return b;
 }
 
-int main()
+
+// the following generates every partition for a set with N elements.  some elements may be ignored
+#define N 3
+
+int partition[N];
+int pn; // number of partitions currently exist
+
+// return the set representated by bit mask d, note that this is 1-indexed
+string setString(int d)
 {
-	makeTestCase(25, 23, 1000000007);
-	makeTestCase(27, 21, 1000000007);
-	makeTestCase(5, 2, 13);
+	int count = 1;
+	string ret = "{";
+	while(d != 0)
+	{
+		if(d%2 == 1)
+		{
+			ret += to_string(count) + " ";
+		}
+		count++;
+		d/=2;
+	}
+
+	ret += "}";
+	return ret;
+}
+
+void recComputePartition(int d)
+{
+    if (d == N) 
+	{
+        // we have generated a partition at this point
+		for(int i = 0; i < pn; i++)
+		{
+			cout << setString(partition[i]);
+		}
+		cout << endl;
+    } 
+	else 
+	{
+        // add to an existing partition ( a partition with 3 elements can be created by
+		// adding the third element to a set within a partition of 2 element
+		// or by adding the third element as a set of its own)
+
+        for (int i = 0; i < pn; i++) {
+            partition[i] ^= (1 << d);
+            recComputePartition(d + 1);
+            partition[i] ^= (1 << d);
+        }
+
+        // add to a new partition
+        partition[pn++] = (1 << d);
+        recComputePartition(d + 1);
+        pn--;
+         
+        // ignore this d from the partition
+        recComputePartition(d + 1);
+    }
 }
