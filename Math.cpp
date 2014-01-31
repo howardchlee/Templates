@@ -1,13 +1,23 @@
-/*
- *   Fast Combination:  This is used to compute C(n, r) % p, where p is prime, 
- *                      quickly using Euler's Theorem to calculate modular
- *			inverses in the Zp group.
- */
+
 
 #include <iostream>
 #include <vector>
 
 using namespace std;
+
+double fast_pow(double a, int n)
+{
+	double ret = 1;
+	while(n)
+	{
+		if(n%2 == 1) ret *= a;
+		a *= a;
+		n/= 2;
+	}
+
+	return ret;
+}
+
 
 // calculates (a^b) % p
 long long pow(long long a, long long b, long long p)
@@ -45,6 +55,12 @@ long long modularInversePrime(long long a, long long n)
 {
 	return pow(a, n-2, n);
 }
+
+/*
+ *   Fast Combination:  This is used to compute C(n, r) % p, where p is prime, 
+ *                      quickly using Euler's Theorem to calculate modular
+ *			inverses in the Zp group.
+ */
 
 // calculates nCr (mod p), where p is prime 
 // since Zp is cyclic, 
