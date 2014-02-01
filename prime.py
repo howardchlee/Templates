@@ -14,11 +14,12 @@ def computePrimesUpTo(n):
 			isPrime[j] = False;
 	return ret
 	
-def getPrimeFactorsOf(n):
+def getPrimeFactorsOf(self, n):
 	primePowers = {};
 		
 	i = 2;
-	while i <= n:
+
+	while i <= math.sqrt(n):
 		if(n % i == 0):
 			power = 0;
 			while(n % i == 0):
@@ -26,7 +27,8 @@ def getPrimeFactorsOf(n):
 				power+= 1;
 			primePowers[i] = power;
 		i+=1;
-	
+	if(n > 1):
+		primePowers[n] = 1;
 	return primePowers;
 
 		
