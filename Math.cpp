@@ -127,16 +127,68 @@ long long gcd(long long a, long long b)
 }
 
 
+// turns 1112 -> {1, 2, 3} {4}
+// support up to 9 + 26 subsets (1-9, A-Z)
+void printPartition(const string &s) 
+{
+	vector<int> setNums;
+	vector<vector<int>> mysets;
+	int max = 0;
+	for(int i = 0; i < s.size(); i++)
+	{
+		int thisSetNum = 0;
+		if(isalpha(s[i]))
+		{
+			thisSetNum = s[i] - 'A' + 10;
+		}
+		else
+		{
+			thisSetNum = s[i] - '0';
+		}
+		setNums.push_back(thisSetNum);
+		if(thisSetNum > max) max = thisSetNum;
+	}
+
+	for(int i = 0; i < max; i++)
+	{
+		vector<int> v;
+		mysets.push_back(v);
+	}
+
+	for(int i = 0; i < setNums.size(); i++)
+	{
+		mysets[setNums[i]-1].push_back(i+1);
+	}
+
+	for(int i = 0; i < mysets.size(); i++)
+	{
+		cout << "{";
+		for(int j = 0; j < mysets[i].size(); j++)
+		{
+			cout << mysets[i][j];
+			if(j != mysets[i].size() -1)
+				cout << ", ";
+		}
+		cout << "} ";
+	}
+	cout << endl;
+}
+
+
+
+
 // the following generates every partition for a set with N elements.  some elements may be ignored
+// what you want to do with the partitions should be put within the if statement of if(d == N)
+#define set_t int
 #define N 3
 
-int partition[N];
+set_t partition[N];
 int pn; // number of partitions currently exist
 
-// return the set representated by bit mask d, note that this is 1-indexed
-string setString(int d)
+// return the set representated by bit mask d, note that this is 0-indexed
+string setString(set_t d)
 {
-	int count = 1;
+	int count = 0;
 	string ret = "{";
 	while(d != 0)
 	{
@@ -150,6 +202,19 @@ string setString(int d)
 
 	ret += "}";
 	return ret;
+}
+
+int countElements(set_t s)
+{
+	int count = 0;
+	while(s != 0)
+	{
+		if(s%2 == 1)
+			count++;
+		s/=2;
+	}
+
+	return count;
 }
 
 void recComputePartition(int d)
