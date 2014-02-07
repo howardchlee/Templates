@@ -3,6 +3,7 @@
 
 using namespace std;
 
+// calculates a^n
 double fast_pow(double a, int n)
 {
 	double ret = 1;
@@ -14,6 +15,88 @@ double fast_pow(double a, int n)
 	}
 
 	return ret;
+}
+
+// similar to above but calculates a^b (mod c)
+double fast_pow_mod(long long a, int b, int c)
+{
+	long long ret = 1; y = a;
+	while(b > 0)
+	{
+		if(b %2 == 1){
+			ret *= y;
+			ret %= c;
+		}
+		y *= y;
+		y %= c;
+		b/=2;
+	}
+	return ret %c;
+}
+
+double fast_mult_mod(long long a, long long b, long long c)
+{
+	long long x = 0;
+	y = a % c;
+	while(b > 0)
+	{
+		if(b%2 == 1)
+		{
+			x += y;
+			x %= c;
+		}
+		y*= 2;
+		y %= c;
+		b/=2;
+	}
+	return x%c
+}
+
+/* Miller-Rabin primality test, iteration signifies the accuracy of the test */
+bool Miller(long long p,int iteration){
+    if(p<2){
+        return false;
+    }
+    if(p!=2 && p%2==0){
+        return false;
+    }
+    long long s=p-1;
+    while(s%2==0){
+        s/=2;
+    }
+    for(int i=0;i<iteration;i++){
+        long long a=rand()%(p-1)+1,temp=s;
+        long long mod=fast_pow_mod(a,temp,p);
+        while(temp!=p-1 && mod!=1 && mod!=p-1){
+            mod *= fast_mult_mod(mod, mod, p);
+            temp *= 2;
+        }
+        if(mod!=p-1 && temp%2==0){
+            return false;
+        }
+    }
+    return true;
+}
+
+/* Fermat's test for checking primality, the more iterations the more is accuracy */
+bool Fermat(long long p,int iterations){
+    if(p == 1)
+    { // 1 isn't prime
+        return false;
+    }
+    if(p == 2)
+    	return true;
+    for(int i=0;i<iterations;i++)
+    {
+        // choose a random integer between 1 and p-1 ( inclusive )
+        long long a = rand()%(p-1)+1; 
+        // modulo is the function we developed above for modular exponentiation.
+        if(modulo(a,p-1,p) != 1)
+        { 
+            return false; /* p is definitely composite */
+        }
+    }
+    return true; /* p is probably prime */
 }
 
 #include <cmath>
