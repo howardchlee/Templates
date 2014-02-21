@@ -209,6 +209,11 @@ long long gcd(long long a, long long b)
 	return b;
 }
 
+long long lcm(long long a, long long b)
+{
+	return b * a / gcd(a, b);
+}
+
 
 // turns 1112 -> {1, 2, 3} {4}
 // support up to 9 + 26 subsets (1-9, A-Z)

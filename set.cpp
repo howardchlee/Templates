@@ -5,12 +5,22 @@ using namespace std;
 #define set_t long long
 #define index_t int
 
-set_t set_add(set_t s, index_t e)
+void set_add(set_t &s, index_t e)
 {
-	return s | (1 << e);
+	s |= (1 << e);
 }
 
-set_t set_remove(set_t s, index_t i)
+set_t set_added(set_t s, index_t e)
+{
+	return s | (1 << e);	
+}
+
+void set_remove(set_t &s, index_t i)
+{
+	 s &= (~(1 << i));
+}
+
+set_t set_removed(set_t s, index_t i)
 {
 	return s & (~(1 << i));
 }
